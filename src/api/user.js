@@ -1,24 +1,21 @@
-import request from '@/utils/request'
+import http from '@/utils/request'
 
-export function login(data) {
-  return request({
-    url: '/vue-admin-template/user/login',
-    method: 'post',
-    data
-  })
+export async function login(data) {
+  return http.post('/login', data)
 }
 
-export function getInfo(token) {
-  return request({
-    url: '/vue-admin-template/user/info',
-    method: 'get',
-    params: { token }
-  })
+export async function getInfo(token) {
+  return http.getRestApi('/user/getUserInfo', token)
 }
 
-export function logout() {
-  return request({
-    url: '/vue-admin-template/user/logout',
-    method: 'post'
-  })
+export async function getUserRoles(token) {
+  return http.getRestApi('/user/getUserRoles', token)
+}
+
+export async function getUserRolesById(id) {
+  return http.getRestApi('/user/getUserRolesById', id)
+}
+
+export async function logout() {
+  return http.get('/logOut')
 }

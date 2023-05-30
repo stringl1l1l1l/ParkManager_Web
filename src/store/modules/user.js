@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import {login, logout, getInfo, getUserRoles} from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -6,7 +6,8 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    roles: []
   }
 }
 
@@ -24,7 +25,13 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
-  }
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
+  },
+  SET_INTRODUCTION: (state, introduction) => {
+    state.introduction = introduction
+  },
 }
 
 const actions = {
@@ -48,15 +55,23 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
-
-        const { name, avatar } = data
-
+        getUserRoles(state.token).then(response => {
+         const roles = response.data
+          // roles must be a non-empty array
+          if (!roles || roles.length <= 0) {
+            reject('getInfo: roles must be a non-null array!')
+          }
+          commit('SET_ROLES', roles)
+        }).catch(error => {
+          reject(error)
+        })
+        const { name, avatar, introduction } = data
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
+        commit('SET_INTRODUCTION', introduction)
         resolve(data)
       }).catch(error => {
         reject(error)
