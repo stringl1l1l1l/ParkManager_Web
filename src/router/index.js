@@ -6,30 +6,6 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
-/**
- * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
- *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
- * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
- */
-
-/**
- * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
- */
 export const constantRoutes = [
   {
     path: '/login',
@@ -65,8 +41,14 @@ export const constantRoutes = [
       {
         path: 'parkingLotList',
         name: 'parkingLotList',
-        component: () => import ('@/views/table/parkingLotList'),
-        meta: { title: '停车场列表', icon: 'table' }
+        component: () => import('@/views/table/parkingLotList'),
+        meta: { title: '停车场管理', icon: 'table' }
+      },
+      {
+        path: 'orderList',
+        name: 'orderList',
+        component: () => import('@/views/table/orderList'),
+        meta: { title: '订单管理', icon: 'table' }
       },
     ]
   },
@@ -80,19 +62,19 @@ export const constantRoutes = [
       {
         path: 'userRoleList',
         name: 'userRoleList',
-        component: () => import ('@/views/permission/userRoleList'),
+        component: () => import('@/views/permission/userRoleList'),
         meta: { title: '用户角色管理', icon: 'lock' }
       },
       {
         path: 'rolePermission',
         name: 'rolePermission',
-        component: () => import ('@/views/permission/rolePermission'),
+        component: () => import('@/views/permission/rolePermission'),
         meta: { title: '角色权限管理', icon: 'lock' }
       },
       {
         path: 'permissionMenu',
         name: 'permissionMenu',
-        component: () => import ('@/views/permission/permissionMenu'),
+        component: () => import('@/views/permission/permissionMenu'),
         meta: { title: '权限指令管理', icon: 'lock' }
       }
     ]

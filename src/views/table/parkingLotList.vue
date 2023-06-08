@@ -1,9 +1,18 @@
 ﻿<template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button class="filter-item" style="margin-left: 10px; margin-bottom: 20px" type="primary" icon="el-icon-edit" @click="handleCreate">
-        Add
-      </el-button>
+      <el-row>
+        <el-col :span="15">
+          <el-button class="filter-item" style="margin-left: 10px; margin-bottom: 20px" type="primary" icon="el-icon-edit"
+            @click="handleCreate">
+            Add
+          </el-button>
+        </el-col>
+
+        <el-col :span="6" style="float:right">
+          <el-input placeholder="请输入搜索内容" prefix-icon="el-icon-search" v-model="this.search"/>
+        </el-col>
+      </el-row>
     </div>
 
     <el-table
@@ -114,11 +123,6 @@
                   {{ scope.row.val }}
                 </template>
               </el-table-column>
-              <el-table-column label="天数" width="95px" align="center">
-                <template slot-scope="scope">
-                  {{ scope.row.val }}
-                </template>
-              </el-table-column>
               <el-table-column label="单价" width="95px" align="center">
                 <template slot-scope="scope">
                   {{ scope.row.val }}
@@ -126,7 +130,7 @@
               </el-table-column>
             </el-table>
             <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="">确定</el-button>
+            <el-button type="primary" size="mini" >确定</el-button>
           </div>
           <el-button slot="reference" size= "mini" @click="getChargeRuleTable(temp.parkingLotId)">编辑计费规则</el-button>
         </el-popover>
@@ -142,9 +146,6 @@
         </el-button>
       </div>
     </el-dialog>
-
-
-
   </div>
 </template>
 <script>
@@ -221,6 +222,7 @@ export default {
         update: '编辑',
         create: '创建'
       },
+      search: "",
     }
   },
   created() {
@@ -352,6 +354,9 @@ export default {
           }]
         this.chargeRule = response.data
       })
+    },
+    searchParklot() {
+      
     }
   }
 }

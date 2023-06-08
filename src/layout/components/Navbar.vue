@@ -16,7 +16,7 @@
               返回首页
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href='http://47.97.90.35:8080/swagger-ui.html'>
+          <a target="_blank" href='http://localhost:8080/swagger-ui.html'>
             <el-dropdown-item>Swagger 文档</el-dropdown-item>
           </a>
           <el-dropdown-item divided @click.native="logout">

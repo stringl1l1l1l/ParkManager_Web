@@ -1,20 +1,13 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button class="filter-item" style="margin-left: 10px; margin-bottom: 20px" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 10px; margin-bottom: 20px" type="primary" icon="el-icon-edit"
+        @click="handleCreate">
         Add
       </el-button>
     </div>
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="加载中……"
-      border
-      style="width: 100%;"
-      fit
-      highlight-current-row
-      :ke="itemKey"
-    >
+    <el-table v-loading="listLoading" :data="list" element-loading-text="加载中……" border style="width: 100%;" fit
+      highlight-current-row :ke="itemKey">
       <el-table-column align="center" label="序号" width="50px">
         <template slot-scope="scope">
           {{ scope.$index }}
@@ -35,12 +28,12 @@
           {{ scope.row.username }}
         </template>
       </el-table-column>
-      <el-table-column label="密码" min-width="300px" align="center">
+      <el-table-column label="密码" min-width="150px" align="center">
         <template slot-scope="scope">
           {{ scope.row.password }}
         </template>
       </el-table-column>
-      <el-table-column label="注册时间" width="100px" align="center">
+      <el-table-column label="注册时间" width="160px" align="center">
         <template slot-scope="scope">
           {{ parseTime(scope.row.registerTime) }}
         </template>
@@ -60,47 +53,36 @@
 
       <el-table-column label="操作" align="center" width="250px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            v-if="scope.row.delFlag != 1"
-            size="mini"
-            type="primary"
+          <el-button v-if="scope.row.delFlag != 1" size="mini" type="primary"
             @click="handleUpdate(scope.$index, scope.row)">编辑</el-button>
-          <el-button
-            v-if="scope.row.delFlag != 1"
-            size="mini"
-            type="warning"
+          <el-button v-if="scope.row.delFlag != 1" size="mini" type="warning"
             @click="handleAuthenticate(scope.$index, scope.row)">授权</el-button>
-          <el-button
-            v-if="scope.row.delFlag != 0"
-            size="mini"
-            type="success"
+          <el-button v-if="scope.row.delFlag != 0" size="mini" type="success"
             @click="handleRestore(scope.$index, scope.row)">还原</el-button>
-          <el-button
-            v-if="scope.row.delFlag != 1"
-            size="mini"
-            type="danger"
+          <el-button v-if="scope.row.delFlag != 1" size="mini" type="danger"
             @click="handleDelete(scope.$index, scope.row)">注销</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px"
+        style="width: 400px; margin-left:50px;">
 
         <el-form-item label="手机号" prop="phoneNum">
-          <el-input v-model="temp.phoneNum" placeholder="请输入,编辑时不输入即不做修改" style="width:350px;"/>
+          <el-input v-model="temp.phoneNum" placeholder="请输入,编辑时不输入即不做修改" style="width:350px;" />
         </el-form-item>
 
         <el-form-item label="用户名" prop="phoneNum">
-          <el-input v-model="temp.username" placeholder="请输入,编辑时不输入即不做修改" maxlength="30" style="width:350px;"/>
+          <el-input v-model="temp.username" placeholder="请输入,编辑时不输入即不做修改" maxlength="30" style="width:350px;" />
         </el-form-item>
 
         <el-form-item label="密码" prop="password">
-          <el-input v-model="temp.password" placeholder="请输入未加密密码,编辑时不输入即不做修改" show-password style="width:350px;"/>
+          <el-input v-model="temp.password" placeholder="请输入未加密密码,编辑时不输入即不做修改" show-password style="width:350px;" />
         </el-form-item>
 
         <el-form-item label="车牌号" prop="carNum">
-          <el-input v-model="temp.carNum" placeholder="请输入,编辑时不输入即不做修改" style="width:350px;"/>
+          <el-input v-model="temp.carNum" placeholder="请输入,编辑时不输入即不做修改" style="width:350px;" />
         </el-form-item>
 
       </el-form>
@@ -108,7 +90,7 @@
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()">
           确认
         </el-button>
       </div>
@@ -118,7 +100,7 @@
       <el-form label-position="left" label-width="50px">
         <el-form-item v-for="item in roleList" :key="item.roleId">
           <el-checkbox-group v-model="checkRoles">
-            <el-checkbox  :label="item.roleId">{{ item.roleName }}</el-checkbox>
+            <el-checkbox :label="item.roleId">{{ item.roleName }}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-form>
@@ -131,6 +113,12 @@
         </el-button>
       </div>
     </el-dialog>
+    <el-row>
+      <el-col :span="10">
+        <el-pagination background layout="prev, pager, next, jumper" @current-change="handleCurrentPageChange"
+          :total="this.total" />
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -140,14 +128,14 @@ import {
   restoreUserById,
   setParkingLotById,
   updateUserById,
-  insertParkingLot, insertUser
+  insertParkingLot, insertUser, showUsersByPages
 } from '@/api/table'
-import {UTC2GMT} from "@/utils"
-import {deleteUserRole, findAllRoles, findAllRolesOfOneUser, insertUserRole} from "@/api/permission";
+import { UTC2GMT } from "@/utils"
+import { deleteUserRole, findAllRoles, findAllRolesOfOneUser, insertUserRole } from "@/api/permission";
 
 export default {
   filters: {
-    numMap(status){
+    numMap(status) {
       const map = [
         '发布',
         '删除'
@@ -210,10 +198,12 @@ export default {
       tempRow: null, // 当前行
       rules: {
       },
+      total: null,
+      curPage: 1,
     }
   },
   created() {
-    this.fetchData()
+    this.fetchData(1)
     this.fetchRoles()
   },
   methods: {
@@ -223,14 +213,16 @@ export default {
         this.roleList = response.data
       })
     },
-    fetchData() {
+    fetchData(pageNum) {
       this.listLoading = true
-      showAllUsers().then(response => {
-        this.list = response.data
+      showUsersByPages(pageNum).then(response => {
+        this.list = response.data.records
         this.listLoading = false
+        this.total = response.data.total
+        this.curPage = response.data.current
       })
     },
-    formUserRolePairs( userId, roles) {
+    formUserRolePairs(userId, roles) {
       let userRole = {}, array = []
       for (const role of roles) {
         userRole['userId'] = userId
@@ -288,8 +280,8 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          insertUser(this.temp).then( (response) => {
-            if(response.data["影响行数"] !== 0) {
+          insertUser(this.temp).then((response) => {
+            if (response.data["影响行数"] !== 0) {
               this.dialogFormVisible = false
               this.$message({
                 message: '添加成功',
@@ -305,8 +297,8 @@ export default {
       })
     },
     handleRestore(index, row) {
-      restoreUserById(row.userId).then( response => {
-        if(response.data["影响行数"] !== 0) {
+      restoreUserById(row.userId).then(response => {
+        if (response.data["影响行数"] !== 0) {
           this.$message({
             message: '还原成功',
             type: 'success'
@@ -325,8 +317,8 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteUserById(row.userId).then( response => {
-          if(response.data["影响行数"] !== 0) {
+        deleteUserById(row.userId).then(response => {
+          if (response.data["影响行数"] !== 0) {
             this.$message({
               type: 'success',
               message: '注销成功!'
@@ -345,7 +337,7 @@ export default {
       });
     },
     handleAuthenticate(index, row) {
-      findAllRolesOfOneUser(row.userId).then( response => {
+      findAllRolesOfOneUser(row.userId).then(response => {
         this.userRoles = response.data
         this.checkRoles = []
         for (const role of this.userRoles) {
@@ -356,27 +348,27 @@ export default {
       this.dialogStatus = 'authenticate'
       this.authenticateDialogVisible = true
     },
-    authenticate(){
+    authenticate() {
       let array = []
       let delRoles = [], insertRoles = []
       //从当前用户的角色中去除勾选的角色, 剩下的是待删除的角色
-      if(this.userRoles) {
+      if (this.userRoles) {
         delRoles = this.userRoles.filter(role => { return !this.checkRoles.includes(role.roleId) })
         //所有勾选的且不是用户已有的角色即为待插入角色
         insertRoles = this.roleList.filter(role => {
           return this.checkRoles.includes(role.roleId)
-        }).filter(role => { return !this.userRoles.some(item => item.roleId === role.roleId)})
-        if(delRoles) {
+        }).filter(role => { return !this.userRoles.some(item => item.roleId === role.roleId) })
+        if (delRoles) {
           const arr = this.formUserRolePairs(this.tempRow.userId, delRoles)
           console.log(arr)
           deleteUserRole(arr).then(response => {
-              if(response.data["影响行数"] !== 0) {
-                this.$message({
-                  message: '删除成功',
-                  type: 'success'
-                });
-              }
+            if (response.data["影响行数"] !== 0) {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              });
             }
+          }
           )
         }
       }
@@ -389,7 +381,7 @@ export default {
       array = this.formUserRolePairs(this.tempRow.userId, insertRoles)
 
       insertUserRole(array).then(response => {
-        if(response.data["影响行数"] !== 0) {
+        if (response.data["影响行数"] !== 0) {
           this.$message({
             message: '添加成功',
             type: 'success'
@@ -398,6 +390,10 @@ export default {
       });
       this.authenticateDialogVisible = false
     },
+    handleCurrentPageChange(newPage) {
+      console.log("切换页面", newPage)
+      this.fetchData(newPage)
+    }
   }
 }
 </script>
